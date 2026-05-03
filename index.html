@@ -1,108 +1,370 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guardian — Velion</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guardian — Velion Engine</title>
 
 <style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-margin:0;
-font-family:Arial;
-background:
-radial-gradient(circle at 20% 20%, rgba(0,255,120,.15), transparent 30%),
-radial-gradient(circle at 80% 10%, rgba(255,200,80,.12), transparent 30%),
-#020503;
-color:white;
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  color:#fff;
+  background:#020403;
+  overflow-x:hidden;
 }
 
-.container{
-display:flex;
-align-items:center;
-justify-content:space-between;
-height:100vh;
-padding:0 8%;
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(0,255,120,.22),transparent 28%),
+    radial-gradient(circle at 80% 10%,rgba(255,210,80,.16),transparent 25%),
+    radial-gradient(circle at 50% 80%,rgba(0,120,60,.18),transparent 35%),
+    #020403;
+  z-index:-3;
 }
 
-.left{
-max-width:600px;
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:70px 70px;
+  mask-image:linear-gradient(to bottom,black,transparent 85%);
+  z-index:-2;
+}
+
+.particles span{
+  position:fixed;
+  width:4px;height:4px;
+  background:#8cffb4;
+  border-radius:50%;
+  box-shadow:0 0 18px #8cffb4;
+  animation:float 12s infinite linear;
+  opacity:.55;
+}
+@keyframes float{
+  from{transform:translateY(100vh) scale(.5)}
+  to{transform:translateY(-10vh) scale(1)}
+}
+
+nav{
+  position:fixed;
+  top:22px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1180px,92%);
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(5,10,7,.62);
+  border:1px solid rgba(140,255,180,.14);
+  border-radius:22px;
+  backdrop-filter:blur(18px);
+  z-index:10;
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:.5px;
+}
+.logo span{color:#7dffad}
+
+.navlinks{
+  display:flex;
+  gap:26px;
+  color:#b7b7b7;
+  font-size:14px;
+}
+.navlinks a{color:inherit;text-decoration:none}
+.navlinks a:hover{color:white}
+
+.navbtn{
+  padding:11px 18px;
+  border-radius:14px;
+  border:0;
+  font-weight:800;
+  background:linear-gradient(90deg,#6dff9d,#f5d76b);
+  color:#061009;
+  box-shadow:0 0 35px rgba(80,255,140,.25);
+}
+
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  align-items:center;
+  gap:70px;
+  padding:140px 8% 80px;
+}
+
+.badge{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:9px 15px;
+  border-radius:999px;
+  border:1px solid rgba(120,255,170,.18);
+  background:rgba(120,255,170,.08);
+  color:#adffd0;
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:26px;
 }
 
 h1{
-font-size:80px;
-margin:0;
-line-height:0.9;
+  font-size:clamp(56px,7vw,110px);
+  line-height:.9;
+  margin:0;
+  letter-spacing:-5px;
 }
 
-.highlight{
-background:linear-gradient(90deg,#7bffb3,#ffd66b);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+.grad{
+  background:linear-gradient(90deg,#75ffab,#f6df80);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-p{
-color:#aaa;
-margin-top:25px;
-font-size:18px;
+.hero p{
+  max-width:620px;
+  color:#b9c0bb;
+  font-size:20px;
+  line-height:1.7;
+  margin:30px 0 0;
 }
 
-button{
-margin-top:35px;
-padding:16px 35px;
-border:none;
-border-radius:12px;
-background:linear-gradient(90deg,#7bffb3,#ffd66b);
-color:black;
-font-weight:bold;
-cursor:pointer;
-box-shadow:0 0 30px rgba(0,255,120,.3);
-transition:.2s;
+.actions{
+  display:flex;
+  gap:16px;
+  margin-top:38px;
 }
 
-button:hover{
-transform:scale(1.05);
+.btn{
+  padding:16px 28px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  font-weight:900;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.primary{
+  background:linear-gradient(90deg,#6dff9d,#f5d76b);
+  color:#061009;
+  box-shadow:0 0 45px rgba(93,255,150,.27);
+}
+.secondary{
+  background:rgba(255,255,255,.06);
+  color:white;
+}
+
+.panel{
+  position:relative;
+  padding:2px;
+  border-radius:34px;
+  background:linear-gradient(140deg,rgba(125,255,170,.45),rgba(255,220,90,.25),rgba(255,255,255,.04));
+  box-shadow:0 0 120px rgba(0,255,120,.14);
+}
+
+.console{
+  border-radius:32px;
+  background:rgba(4,10,7,.86);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(22px);
+  padding:28px;
+}
+
+.console-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+}
+.status{
+  color:#7dffad;
+  font-size:13px;
+}
+.dot{
+  display:inline-block;
+  width:8px;height:8px;
+  background:#7dffad;
+  border-radius:50%;
+  margin-right:7px;
+  box-shadow:0 0 15px #7dffad;
+}
+
+.console h2{
+  margin:0;
+  font-size:30px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
 .card{
-width:420px;
-height:260px;
-background:rgba(255,255,255,0.03);
-border:1px solid rgba(255,255,255,0.1);
-border-radius:20px;
-backdrop-filter:blur(10px);
-padding:25px;
-box-shadow:0 0 60px rgba(0,255,120,.08);
+  padding:20px;
+  min-height:135px;
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.08);
+  transition:.25s;
+}
+.card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(125,255,170,.28);
+  box-shadow:0 0 35px rgba(0,255,120,.08);
 }
 
-.card h2{
-margin:0;
+.card b{
+  display:block;
+  font-size:18px;
+  margin-bottom:8px;
+}
+.card span{
+  color:#aeb7b0;
+  font-size:14px;
+  line-height:1.5;
 }
 
-.small{
-color:#aaa;
-margin-top:10px;
+.section{
+  padding:90px 8%;
+}
+
+.section h2{
+  font-size:54px;
+  margin:0 0 18px;
+  letter-spacing:-2px;
+}
+.section p{
+  color:#aeb7b0;
+  max-width:720px;
+  line-height:1.7;
+}
+
+.features{
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.feature{
+  padding:30px;
+  border-radius:28px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+.feature h3{margin:0 0 12px;font-size:24px}
+.feature p{margin:0;color:#aeb7b0}
+
+.cta{
+  margin:80px 8%;
+  padding:70px;
+  text-align:center;
+  border-radius:38px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(125,255,170,.18),transparent 45%),
+    rgba(255,255,255,.045);
+  border:1px solid rgba(125,255,170,.18);
+  box-shadow:0 0 100px rgba(0,255,120,.08);
+}
+.cta h2{
+  margin:0;
+  font-size:64px;
+  letter-spacing:-3px;
+}
+.cta p{color:#b9c0bb;font-size:18px}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:130px}
+  .features{grid-template-columns:1fr}
+  .navlinks{display:none}
+  h1{letter-spacing:-3px}
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="left">
-<h1>Guardian<br><span class="highlight">Velion Engine</span></h1>
-<p>Control total. Automatizare completă. Zero haos.</p>
-<button>Invite Bot</button>
+<div class="particles">
+  <span style="left:10%;animation-delay:0s"></span>
+  <span style="left:25%;animation-delay:2s"></span>
+  <span style="left:45%;animation-delay:5s"></span>
+  <span style="left:70%;animation-delay:1s"></span>
+  <span style="left:88%;animation-delay:4s"></span>
 </div>
 
-<div class="card">
-<h2>Guardian System</h2>
-<p class="small">Moderation • Tickets • AI • Giveaways</p>
-<p class="small">Detectează • Decide • Acționează</p>
-</div>
+<nav>
+  <div class="logo">Guardian <span>Velion</span></div>
+  <div class="navlinks">
+    <a href="#systems">Systems</a>
+    <a href="#security">Security</a>
+    <a href="#deploy">Deploy</a>
+  </div>
+  <button class="navbtn">Invite Bot</button>
+</nav>
 
-</div>
+<section class="hero">
+  <div>
+    <div class="badge">⚡ Velion Engine System</div>
+    <h1>Discord<br><span class="grad">Guardian</span></h1>
+    <p>
+      Sistem premium pentru comunități Metin2: moderare, tichete, giveaway-uri,
+      AI și statistici într-un singur nucleu automatizat.
+    </p>
+
+    <div class="actions">
+      <button class="btn primary">Invite Guardian</button>
+      <button class="btn secondary">Vezi sistemele</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="console">
+      <div class="console-top">
+        <div>
+          <h2>Guardian Console</h2>
+          <p style="margin:7px 0 0;color:#8f9a92">Velion Engine v1.0</p>
+        </div>
+        <div class="status"><span class="dot"></span>Online</div>
+      </div>
+
+      <div class="grid">
+        <div class="card"><b>🛡️ Moderation</b><span>Protecție automată pentru spam, raid-uri și abuz.</span></div>
+        <div class="card"><b>🎫 Tickets</b><span>Support privat, categorii clare și control staff.</span></div>
+        <div class="card"><b>🎉 Giveaways</b><span>Evenimente automate, recovery și panouri curate.</span></div>
+        <div class="card"><b>🧠 AI System</b><span>Rezumat tichete, asistență staff și răspunsuri inteligente.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="systems" class="section">
+  <h2>Construit ca un sistem de joc.</h2>
+  <p>Nu este doar un bot. Este infrastructura centrală care organizează, protejează și automatizează comunitatea Velion.</p>
+
+  <div class="features">
+    <div class="feature"><h3>Control total</h3><p>Totul este organizat într-un flow clar, fără haos și fără mesaje inutile.</p></div>
+    <div class="feature"><h3>Design premium</h3><p>Embed-uri curate, dark theme, accente verzi și experiență de server mare.</p></div>
+    <div class="feature"><h3>AI integrat</h3><p>Ajutor pentru staff, rezumate, răspunsuri și automatizări inteligente.</p></div>
+  </div>
+</section>
+
+<section id="deploy" class="cta">
+  <h2>Activează Guardian.</h2>
+  <p>Nu îl vezi. Dar controlează tot.</p>
+  <button class="btn primary">Add to Discord</button>
+</section>
 
 </body>
 </html>
